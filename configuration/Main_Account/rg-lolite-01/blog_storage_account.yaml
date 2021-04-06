@@ -1,0 +1,8 @@
+---
+bicep_path: storage_account.bicep
+
+Params:
+  location: australiaeast
+  storageName: blog
+  containerName: blog
+  skuName: Standard_LRS
