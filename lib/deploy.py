@@ -1,4 +1,5 @@
 import yaml
+import json
 
 from lib import subproc
 
@@ -12,6 +13,26 @@ def load_location(config):
     with open(location_path) as file:
         location = yaml.load(file, Loader=yaml.FullLoader)        
         return(location['location'])
+
+def get_resource_group(configuration):
+    return configuration.split('/')[1]
+
+def get_subscription(configuration):
+    return configuration.split('/')[0]
+
+def set_subscription(subscription_name):
+    print(f"Setting Subscription: {subscription_name}")
+    subscriptions = json.loads(subproc.run_command("az account list"))
+    for subscription in subscriptions:
+        if subscription['name'] == subscription_name:
+            print(f"setting subscription: {subscription_name}")
+            print(subscription)
+            subscription_id = subscription['id']
+            azure_cli_command = f"az account set --subscription {subscription_id}"
+            subproc.run_command(azure_cli_command)
+            return
+    print("ERROR, SUBSCRIPTION NOT FOUND")
+    exit()
 
 def resource_group_exists(resource_group):
     groups = subproc.run_command("az group list")
@@ -46,8 +67,10 @@ def deploy_bicep(params, bicep, resource_group, location):
 def deploy(configuration):
     config = load_config(configuration)
     location = load_location(configuration)
+    resource_group = get_resource_group(configuration)
+    set_subscription(get_subscription(configuration))
     print(f"Deploying: {configuration}")
-    deploy_bicep(config['params'], config['bicep_path'], configuration.split('/')[1], location)
+    deploy_bicep(config['params'], config['bicep_path'], resource_group, location)
 
 # def deployRg(rg):
 #     return 0
