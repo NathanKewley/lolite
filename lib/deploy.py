@@ -1,5 +1,8 @@
 import yaml
 
+from lib import subproc
+
+
 def load_config(config):
     with open(f"configuration/{config}") as file:
         return yaml.load(file, Loader=yaml.FullLoader)
@@ -13,7 +16,8 @@ def build_param_string(params):
 def deploy_bicep(params, bicep, resource_group):
     parameters = build_param_string(params)
     azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Complete --parameters {parameters}"
-    print(azure_cli_command)
+    print(f"Running: {azure_cli_command}")
+    subproc.run_command(azure_cli_command)
 
 def deploy(configuration):
     config = load_config(configuration)
