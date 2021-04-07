@@ -1,7 +1,7 @@
 ---
 bicep_path: storage_account.bicep
 
-Params:
+params:
   location: australiaeast
   storageName: blog
   containerName: blog
