@@ -3,5 +3,5 @@ import sys
 
 
 def run_command(command):
-    result = subprocess.call([command], shell=True)
+    result = subprocess.getoutput([command])
     return result
