@@ -86,7 +86,13 @@ def deploy_resource_group(configuration):
 
 # python3 lolite.py deploy-subscription lolite-test
 def deploy_subscription(configuration):
-    return 0
+    subscription = get_subscription(configuration)
+    resource_groups = get_child_items(f"configuration/{configuration}/")
+    for resource_group in resource_groups:
+        deploy_resource_group(f"{configuration}/{resource_group}")
 
-# def deploy_account(account):
-#     return 0
+# python3 lolite.py deploy-account
+def deploy_account():
+    subscriptions = get_child_items("configuration/")
+    for subscription in subscriptions:
+        deploy_subscription(subscription)

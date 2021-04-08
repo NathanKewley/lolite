@@ -11,9 +11,6 @@ if __name__ == "__main__":
     elif(sys.argv[1] == "help"):
         output.print_help()
 
-    elif(len(sys.argv) != 3):
-        output.print_error("Unexpected Arguments")
-
     elif(sys.argv[1] == "deploy"):
         deploy.deploy(sys.argv[2])
 
@@ -24,7 +21,7 @@ if __name__ == "__main__":
         deploy.deploy_subscription(sys.argv[2])
 
     elif(sys.argv[1] == "deploy-account"):
-        print("not yet implemented")
+        deploy.deploy_account()
 
     else:
         output.print_error("Unexpected Arguments")

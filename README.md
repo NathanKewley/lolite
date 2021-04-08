@@ -28,6 +28,7 @@ lolite is an Azure Bicep deployment helper. The main goal is to seperate environ
 
 ## Future Features
 
+* Nice output formatting and color
 * Stack output/input referencing
 * Automatically build deploy dependancy tree based on input/output references
 * confgiurable deploy mode
@@ -134,6 +135,7 @@ lolite is designed to be easy to use and allow scoped control of deployments. At
 ### Deploying a single configuration
 
 From the root folder of your repository run the following command:
+
 `python3 lolite.py deploy Subscription_1/Resource_Group_1/storage_account_and_container.yaml`
 
 This will deploy a single configuration / template
@@ -141,6 +143,7 @@ This will deploy a single configuration / template
 ### Deploying at resource group scope
 
 From the root folder of your repository run the following command:
+
 `python3 lolite.py deploy-resource-group Subscription_1/Resource_Group_1`
 
 This will deploy every configuration file under that `resource group`
@@ -148,6 +151,7 @@ This will deploy every configuration file under that `resource group`
 ### Deploying at subscriptions scope
 
 From the root folder of your repository run the following command:
+
 `python3 lolite.py deploy-subscription Subscription_1`
 
 This will deploy each configuration file for each `resouce group` in the specified `subscription`
@@ -155,6 +159,7 @@ This will deploy each configuration file for each `resouce group` in the specifi
 ### Deploying at account scope
 
 From the root folder of your repository run the following command:
+
 `python3 lolite.py deploy-account`
 
 This will deploy every configuration file in the project to the appropriate `subscriptions` and `resource groups`
