@@ -101,7 +101,7 @@ resource StorageContainer 'Microsoft.Storage/storageAccounts/blobServices/contai
 ### Configuration files
 
 Given the configuration file `configuration/Subscription_1/Resource_Group_1/storage_account_and_container.yaml`:
-This is broken down into sections as such: `<discarded>/<Subscription>/<resource_group>/<config_to_deploy>
+This is broken down into sections as such: `<discarded>/<Subscription>/<resource_group>/<config_to_deploy>`
 
 in this case `storage_account_and_container.yaml` might look like the following:
 
