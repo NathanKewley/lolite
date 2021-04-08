@@ -100,8 +100,12 @@ resource StorageContainer 'Microsoft.Storage/storageAccounts/blobServices/contai
 
 ### Configuration files
 
-Given the configuration file `configuration/Subscription_1/Resource_Group_1/storage_account_and_container.yaml`:
-This is broken down into sections as such: `<discarded>/<Subscription>/<resource_group>/<config_to_deploy>`
+Given the configuration file 
+
+`configuration/Subscription_1/Resource_Group_1/storage_account_and_container.yaml`:
+This is broken down into sections as such: 
+
+`<discarded>/<Subscription>/<resource_group>/<config_to_deploy>`
 
 in this case `storage_account_and_container.yaml` might look like the following:
 
@@ -117,9 +121,9 @@ params:
 
 ```
 
-The `bicep_path` here points to the template in the `bicep/` folder of the project. This bicep template is then deployed using the provided `params` block to the `subscription` and `resource group` determined by the configuration files path.
+The `bicep_path` here points to the template in the `bicep/` folder of the project. This bicep template is then deployed using the provided `params` block to the subscription and resource group determined by the configuration files path.
 
-If the `resource group` does not exist lolite will create it for you in the location specified by the `location.yaml` file.
+If the resource group does not exist lolite will create it for you in the location specified by the `location.yaml` file.
 
 ### location.yaml
 
