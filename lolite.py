@@ -7,6 +7,7 @@ from lib import deploy
 if __name__ == "__main__":
     if len(sys.argv) <= 1:
         output.print_error("Unexpected Arguments")
+        output.print_help()
 
     elif(sys.argv[1] == "help"):
         output.print_help()
@@ -25,3 +26,4 @@ if __name__ == "__main__":
 
     else:
         output.print_error("Unexpected Arguments")
+        output.print_help()

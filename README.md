@@ -31,6 +31,7 @@ lolite is an Azure Bicep deployment helper. The main goal is to seperate environ
 * Nice output formatting and color
 * Stack output/input referencing
 * Automatically build deploy dependancy tree based on input/output references
+* Paralell deploys
 * confgiurable deploy mode
 
 ## lolite project structure
