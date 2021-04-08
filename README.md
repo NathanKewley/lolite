@@ -1,6 +1,8 @@
 # lolite
 
-lolite is an Azure Bicep deployment helper. The main goal is to seperate environment configuration from templates. This is inspired by the AWS Sceptre tool.
+lolite is an Azure Bicep orchestration tool. The main goal is to seperate environment configuration from templates. This is inspired by the AWS Sceptre tool.
+
+`NOTE: lolite is a MVP and still very much a WIP`
 
 ## Goals
 
@@ -149,7 +151,7 @@ From the root folder of your repository run the following command:
 
 This will deploy every configuration file under that resource group
 
-### Deploying at subscriptions scope
+### Deploying at subscription scope
 
 From the root folder of your repository run the following command:
 
