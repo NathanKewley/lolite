@@ -146,7 +146,7 @@ From the root folder of your repository run the following command:
 
 `python3 lolite.py deploy-resource-group Subscription_1/Resource_Group_1`
 
-This will deploy every configuration file under that `resource group`
+This will deploy every configuration file under that resource group
 
 ### Deploying at subscriptions scope
 
@@ -154,7 +154,7 @@ From the root folder of your repository run the following command:
 
 `python3 lolite.py deploy-subscription Subscription_1`
 
-This will deploy each configuration file for each `resouce group` in the specified `subscription`
+This will deploy each configuration file for each resouce group in the specified subscription
 
 ### Deploying at account scope
 
@@ -162,4 +162,4 @@ From the root folder of your repository run the following command:
 
 `python3 lolite.py deploy-account`
 
-This will deploy every configuration file in the project to the appropriate `subscriptions` and `resource groups`
+This will deploy every configuration file in the project to the appropriate subscriptions and resource groups
