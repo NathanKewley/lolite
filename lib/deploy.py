@@ -1,5 +1,6 @@
 import yaml
 import json
+import os
 
 from lib import subproc
 
@@ -17,16 +18,17 @@ def load_location(config):
 def get_resource_group(configuration):
     return configuration.split('/')[1]
 
+def get_child_items(path):
+    return(os.listdir(path))
+
 def get_subscription(configuration):
     return configuration.split('/')[0]
 
 def set_subscription(subscription_name):
-    print(f"Setting Subscription: {subscription_name}")
+    print(f"Using Subscription: {subscription_name}")
     subscriptions = json.loads(subproc.run_command("az account list"))
     for subscription in subscriptions:
         if subscription['name'] == subscription_name:
-            print(f"setting subscription: {subscription_name}")
-            print(subscription)
             subscription_id = subscription['id']
             azure_cli_command = f"az account set --subscription {subscription_id}"
             subproc.run_command(azure_cli_command)
@@ -56,7 +58,7 @@ def deploy_bicep(params, bicep, resource_group, location):
         create_resource_group(resource_group, location)
     
     parameters = build_param_string(params)
-    azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Complete --parameters {parameters}"
+    azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --parameters {parameters}"
     print(f"Running: {azure_cli_command}")
     deploy_result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in deploy_result:
@@ -64,6 +66,7 @@ def deploy_bicep(params, bicep, resource_group, location):
         return
     print(deploy_result)
 
+# python3 lolite.py deploy lolite-test/rg-deploy-me-01/lolite_automation_account.yaml
 def deploy(configuration):
     config = load_config(configuration)
     location = load_location(configuration)
@@ -72,11 +75,18 @@ def deploy(configuration):
     print(f"Deploying: {configuration}")
     deploy_bicep(config['params'], config['bicep_path'], resource_group, location)
 
-# def deployRg(rg):
-#     return 0
+# python3 lolite.py deploy-resource-group lolite-test/rg-deploy-me-01
+def deploy_resource_group(configuration):
+    subscription = get_subscription(configuration)
+    resource_group = get_resource_group(configuration)
+    deployments = get_child_items(f"configuration/{configuration}/")
+    for deployment in deployments:
+        if deployment != "location.yaml":
+            deploy(f"{subscription}/{resource_group}/{deployment}")
 
-# def deploySub(sub):
-#     return 0
+# python3 lolite.py deploy-subscription lolite-test
+def deploy_subscription(configuration):
+    return 0
 
-# def deployAccount(account):
+# def deploy_account(account):
 #     return 0

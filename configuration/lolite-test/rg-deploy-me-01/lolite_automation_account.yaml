@@ -1,0 +1,7 @@
+---
+bicep_path: automation/automation_account.bicep
+
+params:
+  location: australiasoutheast
+  appName: loliteAutomation
+  skuName: Free
