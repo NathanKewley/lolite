@@ -55,7 +55,11 @@ def create_resource_group(resource_group, location):
 
 def get_deployment(deployment_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group}"
-    result = subproc.run_command(azure_cli_command)
+    result = ""
+    try:
+        result = subproc.run_command(azure_cli_command)
+    except:
+        logger.error(f"Error running: {azure_cli_command}")
     if "\"provisioningState\": \"Succeeded\"" in result:
         return True
     return False
