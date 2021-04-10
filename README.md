@@ -33,6 +33,8 @@ lolite is an Azure Bicep orchestration tool. The main goal is to seperate enviro
 * Nice output formatting and color
 * Stack output/input referencing
 * Automatically build deploy dependancy tree based on input/output references
+* More user friendly stack names
+* Deleting of stacks
 * Paralell deploys
 * confgiurable deploy mode
 
@@ -43,7 +45,7 @@ A lolite project is structured in the following way:
 ```
 - root/
     - bicep/
-        - storage_account_and_container.yaml
+        - storage_account_and_container.bicep
     - configuration/
         - Subscription_1/
             - Resource_Group_1/
@@ -96,6 +98,8 @@ resource StorageContainer 'Microsoft.Storage/storageAccounts/blobServices/contai
   }
 }
 
+output storageLocation string = StorageAccount.properties.primaryLocation
+
 ```
 
 ### Configuration files
@@ -114,16 +118,23 @@ in this case `storage_account_and_container.yaml` might look like the following:
 bicep_path: storage_account.bicep
 
 params:
-  location: australiaeast
   storageName: storagetestlolit1
   containerName: blog
   skuName: Standard_LRS
+  location: Ref:Subscription_1.Resource_Group_1.config2:storageLocation
 
 ```
 
 The `bicep_path` here points to the template in the `bicep/` folder of the project. This bicep template is then deployed using the provided `params` block to the subscription and resource group determined by the configuration files path.
 
-If the resource group does not exist lolite will create it for you in the location specified by the `location.yaml` file.
+#### Referencing Other Stack Outputs
+
+Any parameter in the config file prefixes with `Ref:` is a reference to an output from a different stack. The format for referncing an output form a different stack is:
+`<Ref:><stack_path><output_name>` where the `stack_path` replaces `/` with `.`.
+
+When referencing the output form a different stack lolite will first check if the dependant deployment exists then deploy it if required. If the dependant deployment does exist lolite will look up the output value and use it for the deployment. Stack hirachy can be of an arbritrary depth and span across the whole project.
+
+If the resource group for a deployment does not exist lolite will create it for you using the location specified by the `location.yaml` file.
 
 ### location.yaml
 
