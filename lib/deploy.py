@@ -62,7 +62,7 @@ def get_deployment_deployment(deployment_name, resource_group):
 
 def get_deployment_output(deployment_name, output_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
-    logger.warning(f"Getting Deployment Output: {deployment_name}:{output_name}")
+    logger.info(f"Getting Deployment Output: {deployment_name}:{output_name}")
     result = json.loads(subproc.run_command(azure_cli_command))
     if "could not be found" in result:
         logger.error("DEPLOYMENT NOT FOUND: {deployment_name}")
@@ -105,14 +105,14 @@ def deploy_bicep(params, bicep, resource_group, location, deployment_name, subsc
     if not resource_group_exists(resource_group):
         create_resource_group(resource_group, location)
       
-    logger.warning(f"Deployment Name: {deployment_name}")
+    logger.info(f"Deployment Name: {deployment_name}")
     parameters = build_param_string(params, subscription)
     azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
     deploy_result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in deploy_result:
-        logger.warning("Deploy Complete\n")
+        logger.info("Deploy Complete\n")
         return
-    logger.warning(deploy_result)
+    logger.error(deploy_result)
 
 # python3 lolite.py deploy lolite-test/rg-deploy-me-01/lolite_automation_account.yaml
 def deploy(configuration):
