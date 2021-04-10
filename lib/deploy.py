@@ -30,25 +30,25 @@ def get_subscription(configuration):
 
 def set_subscription(subscription_name):
     output.print_info(f"Using Subscription: {subscription_name}")
-    subscriptions = json.loads(subproc.run_command("az account list"))
+    subscriptions = json.loads(subproc.run_command("az account list --output json"))
     for subscription in subscriptions:
         if subscription['name'] == subscription_name:
             subscription_id = subscription['id']
-            azure_cli_command = f"az account set --subscription {subscription_id}"
+            azure_cli_command = f"az account set --subscription {subscription_id} --output json"
             subproc.run_command(azure_cli_command)
             return
     output.print_error("SUBSCRIPTION NOT FOUND")
     exit()
 
 def resource_group_exists(resource_group):
-    groups = subproc.run_command("az group list")
+    groups = subproc.run_command("az group list --output json")
     if f"\"name\": \"{resource_group}\"" in groups:
         return True
     return False
 
 def create_resource_group(resource_group, location):
     output.print_command(f"Creating resource group: '{resource_group}' in {location}")
-    azure_cli_command = f"az group create --location {location} --name {resource_group}"
+    azure_cli_command = f"az group create --location {location} --name {resource_group} --output json"
     subproc.run_command(azure_cli_command)
 
 def get_stack_deployment(deployment_name, resource_group):
@@ -59,7 +59,7 @@ def get_stack_deployment(deployment_name, resource_group):
     return False
 
 def get_stack_output(deployment_name, output_name, resource_group):
-    azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group}"
+    azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
     print(f"Getting stack output: {azure_cli_command}")
     result = json.loads(subproc.run_command(azure_cli_command))
     return(result["properties"]["outputs"][output_name]["value"])
@@ -93,7 +93,7 @@ def deploy_bicep(params, bicep, resource_group, location, deployment_name, subsc
     output.print_command(f"Deployment Name: {deployment_name}")
     parameters = build_param_string(params)
     set_subscription(subscription)
-    azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters}"
+    azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
     deploy_result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in deploy_result:
         output.print_info("Deploy Complete\n")
