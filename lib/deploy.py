@@ -29,7 +29,6 @@ def get_subscription(configuration):
     return configuration.split('/')[0]
 
 def set_subscription(subscription_name):
-    output.print_info(f"Using Subscription: {subscription_name}")
     subscriptions = json.loads(subproc.run_command("az account list --output json"))
     for subscription in subscriptions:
         if subscription['name'] == subscription_name:
@@ -51,34 +50,42 @@ def create_resource_group(resource_group, location):
     azure_cli_command = f"az group create --location {location} --name {resource_group} --output json"
     subproc.run_command(azure_cli_command)
 
-def get_stack_deployment(deployment_name, resource_group):
+def get_deployment_deployment(deployment_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group}"
     result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in result:
         return True
     return False
 
-def get_stack_output(deployment_name, output_name, resource_group):
+def get_deployment_output(deployment_name, output_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
-    print(f"Getting stack output: {output_name}")
+    output.print_info(f"Getting Deployment Output: {deployment_name}:{output_name}")
     result = json.loads(subproc.run_command(azure_cli_command))
+    if "could not be found" in result:
+        output.print_error("DEPLOYMENT NOT FOUND: {deployment_name}")
+        exit()
+    if not "outputs" in result["properties"]:
+        output.print_error("Deployment output not found: {deployment_name}:{output_name}")
+        exit()        
+    if not output_name in result["properties"]["outputs"]:
+        output.print_error("Deployment output not found: {deployment_name}:{output_name}")
+        exit()                
     return(result["properties"]["outputs"][output_name]["value"])
 
-def get_stack_output_param(value, subscription):
+def get_deployment_output_param(value, subscription):
     deployment_name = value.split(":")[1]
     output_name = value.split(":")[2]
     resource_group = value.split(":")[1][1:].split(".")[1]
     parameter_subscription = value.split(":")[1].split(".")[0]
-    print(f"Parameter subscription: {parameter_subscription}")
     set_subscription(parameter_subscription)
 
-    # Deploy dependant stack
-    if not get_stack_deployment(deployment_name, resource_group):
+    # Deploy dependant deployment
+    if not get_deployment_deployment(deployment_name, resource_group):
         deployment_config_path = deployment_name.replace(".","/") + ".yaml"
-        output.print_info("Dependant stack not deployed. deploying: {deployment_config_path}")
+        output.print_info("Dependant deployment not deployed. deploying: {deployment_config_path}")
         deploy(deployment_config_path)
 
-    value = get_stack_output(deployment_name, output_name, resource_group)
+    value = get_deployment_output(deployment_name, output_name, resource_group)
     set_subscription(subscription)
     return value
 
@@ -86,7 +93,7 @@ def build_param_string(params, subscription):
     param_string = ""
     for param, value in params.items():
         if value.startswith("Ref:"):
-            value = get_stack_output_param(value, subscription)
+            value = get_deployment_output_param(value, subscription)
         param_string = param_string + f"{param}={value} "
     return param_string[:-1]
 
@@ -95,7 +102,7 @@ def deploy_bicep(params, bicep, resource_group, location, deployment_name, subsc
     if not resource_group_exists(resource_group):
         create_resource_group(resource_group, location)
       
-    output.print_command(f"Deployment Name: {deployment_name}")
+    output.print_info(f"Deployment Name: {deployment_name}")
     parameters = build_param_string(params, subscription)
     azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
     deploy_result = subproc.run_command(azure_cli_command)
@@ -111,7 +118,7 @@ def deploy(configuration):
     deployment_name = get_deployment_name(configuration)
     subscription = get_subscription(configuration)
     resource_group = get_resource_group(configuration)
-    output.print_command(f"Deploying: {configuration}")
+    output.print_command(f"Deploying: {configuration} to {subscription}")
     deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
 
 # python3 lolite.py deploy-resource-group lolite-test/rg-deploy-me-01
