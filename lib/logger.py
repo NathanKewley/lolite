@@ -25,6 +25,7 @@ class Logger:
     @staticmethod
     def get_logger(logger_name="logging", level=logging.INFO, colour_format=True):
         logger = logging.getLogger(logger_name)
+        logger.handlers.clear()
         logger.setLevel(level)
         ch = logging.StreamHandler()
         if colour_format:
