@@ -18,3 +18,11 @@ def test_deploy_load_config():
     assert config_loaded["params"]["appName"] == "loliteAutomation"
     assert config_loaded["params"]["skuName"] == "Free"
     assert config_loaded == config_expected_loaded_output
+
+def test_deploy_load_location():
+    config_path = "lolite-test/rg-lolite-deploy-me-01/lolite_automation_account.yaml"
+    config_expected_loaded_location = "australiasoutheast"
+
+    location_config_loaded = deploy.load_location(config_path)
+    assert type(location_config_loaded) == str
+    assert location_config_loaded == config_expected_loaded_location
