@@ -3,11 +3,10 @@ import json
 import os
 
 from lib import subproc
-from lib import output
 from lib.logger import Logger as logger
 
-
 logger = logger.get_logger()
+logger.propagate = False
 
 
 def load_config(config):
@@ -50,7 +49,7 @@ def resource_group_exists(resource_group):
     return False
 
 def create_resource_group(resource_group, location):
-    output.print_command(f"Creating resource group: '{resource_group}' in {location}")
+    logger.warning(f"Creating resource group: '{resource_group}' in {location}")
     azure_cli_command = f"az group create --location {location} --name {resource_group} --output json"
     subproc.run_command(azure_cli_command)
 
@@ -63,16 +62,16 @@ def get_deployment_deployment(deployment_name, resource_group):
 
 def get_deployment_output(deployment_name, output_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
-    output.print_info(f"Getting Deployment Output: {deployment_name}:{output_name}")
+    logger.warning(f"Getting Deployment Output: {deployment_name}:{output_name}")
     result = json.loads(subproc.run_command(azure_cli_command))
     if "could not be found" in result:
-        output.print_error("DEPLOYMENT NOT FOUND: {deployment_name}")
+        logger.error("DEPLOYMENT NOT FOUND: {deployment_name}")
         exit()
     if not "outputs" in result["properties"]:
-        output.print_error("Deployment output not found: {deployment_name}:{output_name}")
+        logger.error("Deployment output not found: {deployment_name}:{output_name}")
         exit()        
     if not output_name in result["properties"]["outputs"]:
-        output.print_error("Deployment output not found: {deployment_name}:{output_name}")
+        logger.error("Deployment output not found: {deployment_name}:{output_name}")
         exit()                
     return(result["properties"]["outputs"][output_name]["value"])
 
@@ -86,7 +85,7 @@ def get_deployment_output_param(value, subscription):
     # Deploy dependant deployment
     if not get_deployment_deployment(deployment_name, resource_group):
         deployment_config_path = deployment_name.replace(".","/") + ".yaml"
-        output.print_info("Dependant deployment not deployed. deploying: {deployment_config_path}")
+        logger.warning("Dependant deployment not deployed. deploying: {deployment_config_path}")
         deploy(deployment_config_path)
 
     value = get_deployment_output(deployment_name, output_name, resource_group)
@@ -106,14 +105,14 @@ def deploy_bicep(params, bicep, resource_group, location, deployment_name, subsc
     if not resource_group_exists(resource_group):
         create_resource_group(resource_group, location)
       
-    output.print_info(f"Deployment Name: {deployment_name}")
+    logger.warning(f"Deployment Name: {deployment_name}")
     parameters = build_param_string(params, subscription)
     azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
     deploy_result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in deploy_result:
-        logger.info("Deploy Complete\n")
+        logger.warning("Deploy Complete\n")
         return
-    logger.info(deploy_result)
+    logger.warning(deploy_result)
 
 # python3 lolite.py deploy lolite-test/rg-deploy-me-01/lolite_automation_account.yaml
 def deploy(configuration):
@@ -122,7 +121,7 @@ def deploy(configuration):
     deployment_name = get_deployment_name(configuration)
     subscription = get_subscription(configuration)
     resource_group = get_resource_group(configuration)
-    output.print_command(f"Deploying: {configuration} to {subscription}")
+    logger.warning(f"Deploying: {configuration} to {subscription}")
     deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
 
 # python3 lolite.py deploy-resource-group lolite-test/rg-deploy-me-01

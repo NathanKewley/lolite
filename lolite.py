@@ -2,7 +2,6 @@ import sys
 import argparse
 from argparse import RawTextHelpFormatter
 
-from lib import output
 from lib import deploy
 from lib.logger import Logger as logger
 

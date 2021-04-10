@@ -3,6 +3,7 @@ import sys
 from lib.logger import Logger as logger
 
 logger = logger.get_logger()
+logger.propagate = False
 
 
 def run_command(command):
