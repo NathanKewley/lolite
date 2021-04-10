@@ -1,5 +1,6 @@
 import sys
 import argparse
+from argparse import RawTextHelpFormatter
 
 from lib import output
 from lib import deploy
@@ -10,9 +11,15 @@ logger = logger.get_logger()
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser(prog='lolite.py')
-    parser.add_argument('operation', nargs='+', help='Valid options are "deploy", "deploy-resource-group", "deploy-subscription", "deploy-account"', choices=[ "deploy", "deploy-resource-group", "deploy-subscription", "deploy-account"], metavar="operation")
-    parser.add_argument('suboperation', nargs='?')
+    parser = argparse.ArgumentParser(prog='lolite.py', formatter_class=RawTextHelpFormatter, 
+    description="""lolite Usage:
+        - deploy: deploy a single configuration
+        - deploy-resource-group: deploy all config in a specific resource group
+        - deploy-subscription: deploy all config in a specific subscription
+        - deploy-account: deploy all config in the account / lolite project
+        see GitHub for more details: https://github.com/NathanKewley/lolite """)
+    parser.add_argument('operation', nargs='+', help=argparse.SUPPRESS, choices=[ "deploy", "deploy-resource-group", "deploy-subscription", "deploy-account"], metavar="operation")
+    parser.add_argument('suboperation', nargs='+', help=argparse.SUPPRESS)
     args = parser.parse_args()
     print(args)
     return args
@@ -22,6 +29,11 @@ if __name__ == "__main__":
     args = _parse_args()
     logger.info("test")
     logger.error("test fail")
+    logger.info(args)
+    try:
+        getattr(deploy, f"{args.operation[0]}")(args.suboperation[0])
+    except Exception as e:
+        logger.error(e)
     
     # if len(sys.argv) <= 1:
     #     output.print_error("Unexpected Arguments")
