@@ -60,14 +60,17 @@ def get_stack_deployment(deployment_name, resource_group):
 
 def get_stack_output(deployment_name, output_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
-    print(f"Getting stack output: {azure_cli_command}")
+    print(f"Getting stack output: {output_name}")
     result = json.loads(subproc.run_command(azure_cli_command))
     return(result["properties"]["outputs"][output_name]["value"])
 
-def get_stack_output_param(value):
+def get_stack_output_param(value, subscription):
     deployment_name = value.split(":")[1]
     output_name = value.split(":")[2]
     resource_group = value.split(":")[1][1:].split(".")[1]
+    parameter_subscription = value.split(":")[1].split(".")[0]
+    print(f"Parameter subscription: {parameter_subscription}")
+    set_subscription(parameter_subscription)
 
     # Deploy dependant stack
     if not get_stack_deployment(deployment_name, resource_group):
@@ -76,23 +79,24 @@ def get_stack_output_param(value):
         deploy(deployment_config_path)
 
     value = get_stack_output(deployment_name, output_name, resource_group)
+    set_subscription(subscription)
     return value
 
-def build_param_string(params):
+def build_param_string(params, subscription):
     param_string = ""
     for param, value in params.items():
         if value.startswith("Ref:"):
-            value = get_stack_output_param(value)
+            value = get_stack_output_param(value, subscription)
         param_string = param_string + f"{param}={value} "
     return param_string[:-1]
 
 def deploy_bicep(params, bicep, resource_group, location, deployment_name, subscription):
+    set_subscription(subscription)  
     if not resource_group_exists(resource_group):
         create_resource_group(resource_group, location)
-    
+      
     output.print_command(f"Deployment Name: {deployment_name}")
-    parameters = build_param_string(params)
-    set_subscription(subscription)
+    parameters = build_param_string(params, subscription)
     azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
     deploy_result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in deploy_result:
