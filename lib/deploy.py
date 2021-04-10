@@ -25,11 +25,11 @@ def get_deployment_name(configuration):
 def get_resource_group(configuration):
     return configuration.split('/')[1]
 
-def get_child_items(path):
-    return(os.listdir(path))
-
 def get_subscription(configuration):
     return configuration.split('/')[0]
+
+def get_child_items(path):
+    return(os.listdir(path))
 
 def set_subscription(subscription_name):
     subscriptions = json.loads(subproc.run_command("az account list --output json"))
@@ -53,7 +53,7 @@ def create_resource_group(resource_group, location):
     azure_cli_command = f"az group create --location {location} --name {resource_group} --output json"
     subproc.run_command(azure_cli_command)
 
-def get_deployment_deployment(deployment_name, resource_group):
+def get_deployment(deployment_name, resource_group):
     azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group}"
     result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in result:
@@ -82,8 +82,7 @@ def get_deployment_output_param(value, subscription):
     parameter_subscription = value.split(":")[1].split(".")[0]
     set_subscription(parameter_subscription)
 
-    # Deploy dependant deployment
-    if not get_deployment_deployment(deployment_name, resource_group):
+    if not get_deployment(deployment_name, resource_group):
         deployment_config_path = deployment_name.replace(".","/") + ".yaml"
         logger.warning("Dependant deployment not deployed. deploying: {deployment_config_path}")
         deploy(deployment_config_path)
