@@ -4,6 +4,10 @@ import os
 
 from lib import subproc
 from lib import output
+from lib.logger import Logger as logger
+
+
+logger = logger.get_logger()
 
 
 def load_config(config):
@@ -26,7 +30,7 @@ def get_subscription(configuration):
     return configuration.split('/')[0]
 
 def set_subscription(subscription_name):
-    output.print_info(f"Using Subscription: {subscription_name}")
+    logger.info(f"Using Subscription: {subscription_name}")
     subscriptions = json.loads(subproc.run_command("az account list"))
     for subscription in subscriptions:
         if subscription['name'] == subscription_name:
@@ -34,7 +38,7 @@ def set_subscription(subscription_name):
             azure_cli_command = f"az account set --subscription {subscription_id}"
             subproc.run_command(azure_cli_command)
             return
-    output.print_error("SUBSCRIPTION NOT FOUND")
+    logger.error("SUBSCRIPTION NOT FOUND")
     exit()
 
 def resource_group_exists(resource_group):
@@ -62,9 +66,9 @@ def deploy_bicep(params, bicep, resource_group, location):
     azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --parameters {parameters}"
     deploy_result = subproc.run_command(azure_cli_command)
     if "\"provisioningState\": \"Succeeded\"" in deploy_result:
-        output.print_info("Deploy Complete\n")
+        logger.info("Deploy Complete\n")
         return
-    output.print_error(deploy_result)
+    logger.info(deploy_result)
 
 # python3 lolite.py deploy lolite-test/rg-deploy-me-01/lolite_automation_account.yaml
 def deploy(configuration):
