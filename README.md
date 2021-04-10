@@ -31,8 +31,8 @@ lolite is an Azure Bicep orchestration tool. The main goal is to seperate enviro
 ## Future Features
 
 * Nice output formatting and color
-* More user friendly stack names
-* Deleting of stacks
+* More user friendly deployment names
+* Deleting of deployments
 * Paralell deploys
 * confgiurable deploy mode
 
@@ -123,12 +123,12 @@ params:
 
 The `bicep_path` here points to the template in the `bicep/` folder of the project. This bicep template is then deployed using the provided `params` block to the subscription and resource group determined by the configuration files path.
 
-#### Referencing Other Stack Outputs
+#### Referencing Other Deployment Outputs
 
 Any parameter in the config file prefixes with `Ref:` is a reference to an output from a different deployment. The format for referncing an output form a different deployment is:
-`<Ref>:<deployment_path>:<output_name>` where the `stack_path` replaces `/` with `.`.
+`<Ref>:<deployment_path>:<output_name>` where the `deployent_path` replaces `/` with `.`.
 
-When referencing the output form a different stack lolite will first check if the dependant deployment exists then deploy it if required. If the dependant deployment does exist lolite will look up the output value and use it for the deployment. Stack hirachy can be of an arbritrary depth and span across the whole project.
+When referencing the output form a different deployment lolite will first check if the dependant deployment exists then deploy it if required. If the dependant deployment does exist lolite will look up the output value and use it for the deployment. deployment hirachy can be of an arbritrary depth and span across the whole project.
 
 If the resource group for a deployment does not exist lolite will create it for you using the location specified by the `location.yaml` file.
 
