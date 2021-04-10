@@ -18,3 +18,6 @@ resource StorageContainer 'Microsoft.Storage/storageAccounts/blobServices/contai
     publicAccess: 'None'
   }
 }
+
+output storageEndpoint object = StorageAccount.properties.primaryEndpoints
+output storageLocation string = StorageAccount.properties.primaryLocation

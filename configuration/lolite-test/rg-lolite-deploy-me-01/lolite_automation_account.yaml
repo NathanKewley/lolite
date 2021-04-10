@@ -2,6 +2,6 @@
 bicep_path: automation/automation_account.bicep
 
 params:
-  location: australiasoutheast
+  location: Ref:lolite-test.rg-lolite-deploy-me-01.lolite_automation_storage:storageLocation
   appName: loliteAutomation
   skuName: Free
