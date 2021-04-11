@@ -35,12 +35,9 @@ class Deployer():
         if "could not be found" in result:
             self.logger.error(f"DEPLOYMENT NOT FOUND: {deployment_name}")
             exit()
-        if not "outputs" in result["properties"]:
+        if not result["properties"]["outputs"][output_name]:
             self.logger.error(f"Deployment output not found: {deployment_name}:{output_name}")
-            exit()        
-        if not output_name in result["properties"]["outputs"]:
-            self.logger.error(f"Deployment output not found: {deployment_name}:{output_name}")
-            exit()                
+            exit()                            
         return(result["properties"]["outputs"][output_name]["value"])
 
     def get_deployment_output_param(self, value, subscription):
@@ -76,3 +73,4 @@ class Deployer():
             self.logger.info("Deploy Complete\n")
             return
         self.logger.error(f"DEPLOYMENT FAILED: {deploy_result}")
+        exit()
