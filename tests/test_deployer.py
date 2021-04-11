@@ -1,4 +1,7 @@
-from lib import deploy
+from lib.deployer import Deployer
+
+
+deploy = Deployer()
 
 def test_deploy():
     assert True

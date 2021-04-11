@@ -2,10 +2,11 @@ import sys
 import argparse
 from argparse import RawTextHelpFormatter
 
-from lib import deploy
 from lib.logger import Logger as logger
+from lib.orchestrator import Orchestrator
 
 logger = logger.get_logger()
+orchestrator = Orchestrator()
 
 
 def _parse_args():
@@ -20,18 +21,15 @@ def _parse_args():
     parser.add_argument('suboperation', nargs='?', default=None, help=argparse.SUPPRESS)
     args = parser.parse_args()
     args.operation[0] = args.operation[0].replace("-", "_")
-    print(args)
     return args
-
 
 if __name__ == "__main__":
     args = _parse_args()
     logger.info(args)
-    try:
-        if args.suboperation is None:
-            getattr(deploy, f"{args.operation[0]}")()
-        else:
-            logger.info(args.suboperation)
-            getattr(deploy, f"{args.operation[0]}")(args.suboperation)
-    except Exception as e:
-        logger.error(e)
+    # try:
+    if args.suboperation is None:
+        getattr(orchestrator, f"{args.operation[0]}")()
+    else:
+        getattr(orchestrator, f"{args.operation[0]}")(args.suboperation)
+    # except Exception as e:
+    #     logger.error(e)
