@@ -1,6 +1,7 @@
 import logging
 
 class LoggerFormatter(logging.Formatter):
+
     grey = "\x1b[38;21m"
     green = "\033[92m"
     red = "\x1b[31;21m"
