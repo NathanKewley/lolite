@@ -15,6 +15,7 @@ class Orchestrator():
         self.deployer = Deployer()
         self.subscription = Subscription()
         self.subproc = Subproc()
+        self.deploys = []
 
     def get_deployment_name(self, configuration):
         return configuration.replace("/",".")[:-5]
@@ -63,19 +64,21 @@ class Orchestrator():
         self.subscription.set_subscription(subscription)
 
     def deploy(self, configuration):
-        config = self.load_config(configuration)
-        location = self.load_location(configuration)
-        deployment_name = self.get_deployment_name(configuration)
-        subscription = self.get_subscription(configuration)
-        resource_group = self.get_resource_group(configuration)
+        if not configuration in self.deploys:
+            self.deploys.append(configuration)
+            config = self.load_config(configuration)
+            location = self.load_location(configuration)
+            deployment_name = self.get_deployment_name(configuration)
+            subscription = self.get_subscription(configuration)
+            resource_group = self.get_resource_group(configuration)
 
-        # deploy dependant deployments before this one
-        for param, value in config['params'].items():
-            if "Ref:" in value:
-                self.check_deployment_dependancy(value, subscription)
+            # deploy dependant deployments before this one
+            for param, value in config['params'].items():
+                if "Ref:" in value:
+                    self.check_deployment_dependancy(value, subscription)
 
-        self.logger.warning(f"Deploying: {configuration} to {subscription}")
-        self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
+            self.logger.warning(f"Deploying: {configuration} to {subscription}")
+            self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
 
     def deploy_resource_group(self, configuration):
         subscription = self.get_subscription(configuration)
