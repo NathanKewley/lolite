@@ -28,7 +28,9 @@ class Deployer():
     def get_deployment_output(self, deployment_name, output_name, resource_group):
         azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
         self.logger.info(f"Getting Deployment Output: {deployment_name}:{output_name}")
+        self.logger.info(f"Azure Command: {azure_cli_command}")
         result = self.subproc.run_command(azure_cli_command)
+        result = json.loads(result)
         if not result:
             self.logger.error(f"DEPLOYMENT NOT FOUND: {deployment_name}")
             exit()            
