@@ -72,7 +72,8 @@ class Orchestrator():
         # deploy dependant deployments before this one
         for param, value in config['params'].items():
             if "Ref:" in value:
-                self.check_deployment_dependancy(value, subscription)
+                if not dry_run:
+                    self.check_deployment_dependancy(value, subscription)
 
         self.logger.warning(f"Deploying: {configuration} to {subscription}")
         if not dry_run:
