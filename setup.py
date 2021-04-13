@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="lolite-test", # Replace with your own username
+    name="lolite",
     version="0.0.1",
     author="Nathan Kewley",
     author_email="nathan.kewley@gmail.com",
@@ -20,7 +20,12 @@ setuptools.setup(
         "License :: OSI Approved :: Apache License 2.0",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "lib"},
-    packages=setuptools.find_packages(where="lib"),
+    package_dir={"": "src"},
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
+    entry_points={
+        'console_scripts': [
+            'lolite = lolite:lolite',
+        ],
+    },    
 )

@@ -10,7 +10,7 @@ orchestrator = Orchestrator()
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser(prog='lolite.py', formatter_class=RawTextHelpFormatter, 
+    parser = argparse.ArgumentParser(prog='lolite', formatter_class=RawTextHelpFormatter, 
     description="""lolite Usage:
         - deploy: deploy a single configuration
         - deploy-resource-group: deploy all config in a specific resource group
@@ -23,7 +23,7 @@ def _parse_args():
     args.operation[0] = args.operation[0].replace("-", "_")
     return args
 
-if __name__ == "__main__":
+def lolite():
     args = _parse_args()
     logger.debug(args)
     try:
