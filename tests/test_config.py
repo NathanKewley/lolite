@@ -1,11 +1,11 @@
 import json
 
-from lib.orchestrator import Orchestrator
+from lolite.lib.orchestrator import Orchestrator
 
 
 orchestrator = Orchestrator()
 
-def test_deploy_load_config():
+def test_deploy_load_config2():
     config_path = "lolite-test/rg-lolite-test-01/lolite_automation_account.yaml"
     config_expected_loaded_output = json.loads(open('tests/test_output/test_deploy_load_config.json', 'r').read())
 
@@ -17,7 +17,7 @@ def test_deploy_load_config():
     assert config_loaded["params"]["skuName"] == "Free"
     assert config_loaded == config_expected_loaded_output
 
-def test_deploy_load_location():
+def test_deploy_load_location2():
     config_path = "lolite-test/rg-lolite-test-01/lolite_automation_account.yaml"
     config_expected_loaded_location = "australiaeast"
 

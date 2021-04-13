@@ -2,8 +2,8 @@ import sys
 import argparse
 from argparse import RawTextHelpFormatter
 
-from lib.logger import Logger as logger
-from lib.orchestrator import Orchestrator
+from lolite.lib.logger import Logger as logger
+from lolite.lib.orchestrator import Orchestrator
 
 logger = logger.get_logger()
 orchestrator = Orchestrator()
