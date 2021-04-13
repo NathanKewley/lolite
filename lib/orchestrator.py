@@ -59,7 +59,7 @@ class Orchestrator():
         self.subscription.set_subscription(parameter_subscription)
         if not self.get_deployment(deployment_name, resource_group):
             deployment_config_path = deployment_name.replace(".","/") + ".yaml"
-            self.logger.warning(f"Dependant deployment not deployed")
+            self.logger.info("Deployment has dependancies. Resolving...")
             self.deploy(deployment_config_path)
         self.subscription.set_subscription(subscription)
 
@@ -76,7 +76,7 @@ class Orchestrator():
                 if not dry_run:
                     self.check_deployment_dependancy(value, subscription)
 
-        self.logger.warning(f"Deploying: {configuration} to {subscription}")
+        self.logger.info(f"Deploying: {configuration} to {subscription}")
         if not dry_run:
             self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
         else:

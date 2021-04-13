@@ -25,11 +25,11 @@ def _parse_args():
 
 if __name__ == "__main__":
     args = _parse_args()
-    logger.info(args)
-    # try:
-    if args.suboperation is None:
-        getattr(orchestrator, f"{args.operation[0]}")()
-    else:
-        getattr(orchestrator, f"{args.operation[0]}")(args.suboperation)
-    # except Exception as e:
-    #     logger.error(e)
+    logger.debug(args)
+    try:
+        if args.suboperation is None:
+            getattr(orchestrator, f"{args.operation[0]}")()
+        else:
+            getattr(orchestrator, f"{args.operation[0]}")(args.suboperation)
+    except Exception as e:
+        logger.error(e)

@@ -7,8 +7,8 @@ setuptools.setup(
     name="lolite-test", # Replace with your own username
     version="0.0.1",
     author="Nathan Kewley",
-    # author_email="author@example.com",
-    description="For making deploying into Azure easier",
+    author_email="nathan.kewley@gmail.com",
+    description="Azure Bicep Deployment Orchestration",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/NathanKewley/lolite",
@@ -17,7 +17,7 @@ setuptools.setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache License 2.0",
         "Operating System :: OS Independent",
     ],
     package_dir={"": "lib"},

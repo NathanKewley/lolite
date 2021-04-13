@@ -18,7 +18,7 @@ class Subscription():
 
     def set_subscription(self, subscription_name):
         if not self.check_if_current(subscription_name):
-            self.logger.info(f"Setting Subscription: {subscription_name}")
+            self.logger.debug(f"Setting Subscription: {subscription_name}")
             subscriptions = json.loads(self.subproc.run_command("az account list --output json"))
             for subscription in subscriptions:
                 if subscription['name'] == subscription_name:
