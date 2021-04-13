@@ -15,6 +15,7 @@ class Orchestrator():
         self.deployer = Deployer()
         self.subscription = Subscription()
         self.subproc = Subproc()
+        self.deploys = []
 
     def get_deployment_name(self, configuration):
         return configuration.replace("/",".")[:-5]
@@ -83,6 +84,7 @@ class Orchestrator():
         
     def deploy_resource_group(self, configuration, dry_run=False):
         test_results = []
+
         subscription = self.get_subscription(configuration)
         resource_group = self.get_resource_group(configuration)
         deployments = self.get_child_items(f"configuration/{configuration}/")
