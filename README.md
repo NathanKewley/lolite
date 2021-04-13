@@ -2,14 +2,15 @@
 
 lolite is an Azure Bicep orchestration tool. The main goal is to seperate environment configuration from templates. This is inspired by the AWS Sceptre tool.
 
-`NOTE: lolite is a MVP and still very much a WIP`
+`NOTE: lolite is still very much a WIP`
 
 ## Goals
 
 * Seperation of Bicep configuration and templates
 * Deploy individual configurations
-* Bulk deploy at different hirachys: Resource Group, Subscription or Account.
+* Bulk deploy at different hirachys: Resource Group, Subscription or Account
 * Automated Resource Group Creation
+* Automated deployment hirachy based on output bindings.
 
 ## Not Goals
 
@@ -28,11 +29,9 @@ lolite is an Azure Bicep orchestration tool. The main goal is to seperate enviro
 * Each subscription has a unique name
 * All deployments are `--mode Incremental`
 
-## Future Features
+## Possible Future Features
 
-* Nice output formatting and color
-* More user friendly deployment names
-* Deleting of deployments
+* pre and post deploy hooks
 * Paralell deploys
 * confgiurable deploy mode
 

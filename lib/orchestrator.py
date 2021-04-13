@@ -59,42 +59,63 @@ class Orchestrator():
         self.subscription.set_subscription(parameter_subscription)
         if not self.get_deployment(deployment_name, resource_group):
             deployment_config_path = deployment_name.replace(".","/") + ".yaml"
-            self.logger.warning(f"Dependant deployment not deployed. deploying: {deployment_config_path}")
+            self.logger.warning(f"Dependant deployment not deployed")
             self.deploy(deployment_config_path)
         self.subscription.set_subscription(subscription)
 
-    def deploy(self, configuration):
-        if not configuration in self.deploys:
-            self.deploys.append(configuration)
-            config = self.load_config(configuration)
-            location = self.load_location(configuration)
-            deployment_name = self.get_deployment_name(configuration)
-            subscription = self.get_subscription(configuration)
-            resource_group = self.get_resource_group(configuration)
+    def deploy(self, configuration, dry_run=False):
+        config = self.load_config(configuration)
+        location = self.load_location(configuration)
+        deployment_name = self.get_deployment_name(configuration)
+        subscription = self.get_subscription(configuration)
+        resource_group = self.get_resource_group(configuration)
 
-            # deploy dependant deployments before this one
-            for param, value in config['params'].items():
-                if "Ref:" in value:
+        # deploy dependant deployments before this one
+        for param, value in config['params'].items():
+            if "Ref:" in value:
+                if not dry_run:
                     self.check_deployment_dependancy(value, subscription)
 
-            self.logger.warning(f"Deploying: {configuration} to {subscription}")
+        self.logger.warning(f"Deploying: {configuration} to {subscription}")
+        if not dry_run:
             self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
+        else:
+            return [config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription]
+        
+    def deploy_resource_group(self, configuration, dry_run=False):
+        test_results = []
 
-    def deploy_resource_group(self, configuration):
         subscription = self.get_subscription(configuration)
         resource_group = self.get_resource_group(configuration)
         deployments = self.get_child_items(f"configuration/{configuration}/")
         for deployment in deployments:
             if deployment != "location.yaml":
-                self.deploy(f"{subscription}/{resource_group}/{deployment}")
+                if not dry_run:
+                    self.deploy(f"{subscription}/{resource_group}/{deployment}")
+                else:
+                    test_results.append(f"{subscription}/{resource_group}/{deployment}")
+        if dry_run:
+            return test_results
 
-    def deploy_subscription(self, configuration):
+    def deploy_subscription(self, configuration, dry_run=False):
+        test_results = []
         subscription = self.get_subscription(configuration)
         resource_groups = self.get_child_items(f"configuration/{configuration}/")
         for resource_group in resource_groups:
-            self.deploy_resource_group(f"{configuration}/{resource_group}")
+            if not dry_run:
+                self.deploy_resource_group(f"{configuration}/{resource_group}")
+            else:
+                test_results.append(f"{configuration}/{resource_group}")
+        if dry_run:
+            return test_results                
 
-    def deploy_account(self):
+    def deploy_account(self, dry_run=False):
+        test_results = []
         subscriptions = self.get_child_items("configuration/")
         for subscription in subscriptions:
-            self.deploy_subscription(subscription)
+            if not dry_run:
+                self.deploy_subscription(subscription)
+            else:
+                test_results.append(subscription)
+        if dry_run:
+            return test_results                        
