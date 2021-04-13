@@ -4,11 +4,11 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="lolite-test", # Replace with your own username
+    name="lolite",
     version="0.0.1",
     author="Nathan Kewley",
-    # author_email="author@example.com",
-    description="For making deploying into Azure easier",
+    author_email="nathan.kewley@gmail.com",
+    description="Azure Bicep Deployment Orchestration",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/NathanKewley/lolite",
@@ -17,10 +17,15 @@ setuptools.setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache License 2.0",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "lib"},
-    packages=setuptools.find_packages(where="lib"),
+    package_dir={"": "src"},
+    packages=setuptools.find_packages(where="src"),
     python_requires=">=3.6",
+    entry_points={
+        'console_scripts': [
+            'lolite = lolite:lolite',
+        ],
+    },    
 )

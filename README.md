@@ -23,6 +23,12 @@ lolite is an Azure Bicep orchestration tool. The main goal is to seperate enviro
 * Azure CLI
 * Azure Bicep CLI
 
+## Building From Source
+
+* Clone this repo
+* Build the project `python3 -m build`
+* Install `pip3 install dist/lolite-0.0.1-py3-none-any.whl`
+
 ## Assumptions
 
 * You have a singlge account with multiple subscriptions
@@ -149,7 +155,7 @@ lolite is designed to be easy to use and allow scoped control of deployments. At
 
 From the root folder of your repository run the following command:
 
-`python3 lolite.py deploy Subscription_1/Resource_Group_1/storage_account_and_container.yaml`
+`lolite deploy Subscription_1/Resource_Group_1/storage_account_and_container.yaml`
 
 This will deploy a single configuration / template
 
@@ -157,7 +163,7 @@ This will deploy a single configuration / template
 
 From the root folder of your repository run the following command:
 
-`python3 lolite.py deploy-resource-group Subscription_1/Resource_Group_1`
+`lolite deploy-resource-group Subscription_1/Resource_Group_1`
 
 This will deploy every configuration file under that resource group
 
@@ -165,7 +171,7 @@ This will deploy every configuration file under that resource group
 
 From the root folder of your repository run the following command:
 
-`python3 lolite.py deploy-subscription Subscription_1`
+`lolite deploy-subscription Subscription_1`
 
 This will deploy each configuration file for each resouce group in the specified subscription
 
@@ -173,6 +179,6 @@ This will deploy each configuration file for each resouce group in the specified
 
 From the root folder of your repository run the following command:
 
-`python3 lolite.py deploy-account`
+`lolite deploy-account`
 
 This will deploy every configuration file in the project to the appropriate subscriptions and resource groups

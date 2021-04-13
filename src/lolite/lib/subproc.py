@@ -1,6 +1,7 @@
 import subprocess
 import sys
-from lib.logger import Logger as logger
+
+from lolite.lib.logger import Logger as logger
 
 class Subproc():
 

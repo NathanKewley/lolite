@@ -2,9 +2,9 @@ import yaml
 import json
 import os
 
-from lib.subproc import Subproc
-from lib.logger import Logger as logger
-from lib.subscription import Subscription
+from lolite.lib.subproc import Subproc
+from lolite.lib.logger import Logger as logger
+from lolite.lib.subscription import Subscription
 
 class Deployer():
 
@@ -21,14 +21,14 @@ class Deployer():
         return False
 
     def create_resource_group(self, resource_group, location):
-        self.logger.warning(f"Creating resource group: '{resource_group}' in {location}")
+        self.logger.info(f"Creating resource group: '{resource_group}' in {location}")
         azure_cli_command = f"az group create --location {location} --name {resource_group} --output json"
         self.subproc.run_command(azure_cli_command)
 
     def get_deployment_output(self, deployment_name, output_name, resource_group):
         azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
-        self.logger.info(f"Getting Deployment Output: {deployment_name}:{output_name}")
-        self.logger.info(f"Azure Command: {azure_cli_command}")
+        self.logger.debug(f"Getting Deployment Output: {deployment_name}:{output_name}")
+        self.logger.debug(f"Azure Command: {azure_cli_command}")
         result = self.subproc.run_command(azure_cli_command)
         result = json.loads(result)
         if not result:
@@ -66,13 +66,13 @@ class Deployer():
         if not self.resource_group_exists(resource_group):
             self.create_resource_group(resource_group, location)
         
-        self.logger.info(f"Deployment Name: {deployment_name}")
+        self.logger.debug(f"Deployment Name: {deployment_name}")
         parameters = self.build_param_string(params, subscription)
         azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
-        self.logger.info(f"command: {azure_cli_command}")
+        self.logger.debug(f"command: {azure_cli_command}")
         deploy_result = self.subproc.run_command(azure_cli_command)
         if "\"provisioningState\": \"Succeeded\"" in deploy_result:
-            self.logger.info("Deploy Complete\n")
+            self.logger.debug("Deploy Complete\n")
             return
         self.logger.error(f"DEPLOYMENT FAILED: {deploy_result}")
         exit()

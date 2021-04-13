@@ -1,4 +1,4 @@
-from lib.orchestrator import Orchestrator
+from lolite.lib.orchestrator import Orchestrator
 
 
 orchestrator = Orchestrator()
