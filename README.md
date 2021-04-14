@@ -1,16 +1,16 @@
 # lolite
 
-lolite is an Azure Bicep orchestration tool. The main goal is to seperate environment configuration from templates. This is inspired by the AWS Sceptre tool.
+lolite is an Azure Bicep orchestration tool. The main goal is to separate environment configuration from templates. This is inspired by the AWS Sceptre tool.
 
 `NOTE: lolite is still very much a WIP`
 
 ## Goals
 
-* Seperation of Bicep configuration and templates
+* Separation of Bicep configuration and templates
 * Deploy individual configurations
-* Bulk deploy at different hirachys: Resource Group, Subscription or Account
+* Bulk deploy at different hierarchies: Resource Group, Subscription or Account
 * Automated Resource Group Creation
-* Automated deployment hirachy based on output bindings.
+* Automated deployment hierarchy based on output bindings.
 
 ## Not Goals
 
@@ -26,20 +26,20 @@ lolite is an Azure Bicep orchestration tool. The main goal is to seperate enviro
 ## Building From Source
 
 * Clone this repo
-* Build the project `python3 -m build`
-* Install `pip3 install dist/lolite-0.0.1-py3-none-any.whl`
+* Build the project `python -m build`
+* Install `pip install dist/lolite-0.0.1-py3-none-any.whl`
 
 ## Assumptions
 
-* You have a singlge account with multiple subscriptions
+* You have a single account with multiple subscriptions
 * Each subscription has a unique name
 * All deployments are `--mode Incremental`
 
 ## Possible Future Features
 
 * pre and post deploy hooks
-* Paralell deploys
-* confgiurable deploy mode
+* Parallel deploys
+* configurable deploy mode
 
 ## lolite project structure
 
@@ -67,8 +67,8 @@ A lolite project is structured in the following way:
 Given the example structure above a few important things to note:
 
 * `bicep` - this folder contains all of your bicep templates.
-* `configuration` - this contains your configuration for deployments, the hierachy is important.
-* `Subscription_1` - This is the root level under configuration. `Subscription_1` matched exactually the name of a subscription in Azure.
+* `configuration` - this contains your configuration for deployments, the hierarchy is important.
+* `Subscription_1` - This is the root level under configuration. `Subscription_1` matched exactly the name of a subscription in Azure.
 * `Resource_Group_1` - At the root level of a given subscription. This sets the resource group for a deployment within that subscription.
 * `location.yaml` - A special configuration file to set the location of the resource group.
 * `storage_account_and_container.yaml` - This is a deployable configuration. It will link to a template in the `bicep` folder and contain the required parameters.
@@ -130,16 +130,16 @@ The `bicep_path` here points to the template in the `bicep/` folder of the proje
 
 #### Referencing Other Deployment Outputs
 
-Any parameter in the config file prefixes with `Ref:` is a reference to an output from a different deployment. The format for referncing an output form a different deployment is:
+Any parameter in the config file prefixes with `Ref:` is a reference to an output from a different deployment. The format for referencing an output from a different deployment is:
 `<Ref>:<deployment_path>:<output_name>` where the `deployent_path` replaces `/` with `.`.
 
-When referencing the output form a different deployment lolite will first check if the dependant deployment exists then deploy it if required. If the dependant deployment does exist lolite will look up the output value and use it for the deployment. deployment hirachy can be of an arbritrary depth and span across the whole project.
+When referencing the output from a different deployment lolite will first check if the dependent deployment exists then deploy it if required. If the dependent deployment does exist lolite will look up the output value and use it for the deployment. deployment hierarchy can be of an arbitrary depth and span across the whole project.
 
 If the resource group for a deployment does not exist lolite will create it for you using the location specified by the `location.yaml` file.
 
 ### location.yaml
 
-This is a super simple file that is required for every resource group. It tells lolite what location to create the resource group in if it does not exist. Each resource deployed into that reosurce group inherits the location. An example of a location.yaml:
+This is a super simple file that is required for every resource group. It tells lolite what location to create the resource group in if it does not exist. Each resource deployed into that resource group inherits the location. An example of a location.yaml:
 
 ```
 ---
@@ -149,7 +149,7 @@ location: australiaeast
 
 ## Usage
 
-lolite is designed to be easy to use and allow scoped control of deployments. At current this is just a python script and not a executatble as such. This is just because I dont know how to do that with python yet lol. 
+lolite is designed to be easy to use and allow scoped control of deployments.
 
 ### Deploying a single configuration
 
@@ -173,7 +173,7 @@ From the root folder of your repository run the following command:
 
 `lolite deploy-subscription Subscription_1`
 
-This will deploy each configuration file for each resouce group in the specified subscription
+This will deploy each configuration file for each resource group in the specified subscription
 
 ### Deploying at account scope
 
