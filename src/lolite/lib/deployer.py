@@ -24,7 +24,7 @@ class Deployer():
         self.subproc.create_resource_group(resource_group, location)
 
     def get_deployment_output(self, deployment_name, output_name, resource_group):
-        result = json.loads(self.subproc.get_deployment_output(deployment_name, resource_group))
+        result = json.loads(self.subproc.get_deployment_output(deployment_name, resource_group, output_name))
         if not result:
             self.logger.error(f"DEPLOYMENT NOT FOUND: {deployment_name}")
             exit()            
