@@ -15,22 +15,16 @@ class Deployer():
         self.subproc = Subproc()
 
     def resource_group_exists(self, resource_group):
-        groups = self.subproc.run_command("az group list --output json")
+        groups = self.subproc.get_resource_groups(resource_group)
         if f"\"name\": \"{resource_group}\"" in groups:
             return True
         return False
 
     def create_resource_group(self, resource_group, location):
-        self.logger.info(f"Creating resource group: '{resource_group}' in {location}")
-        azure_cli_command = f"az group create --location {location} --name {resource_group} --output json"
-        self.subproc.run_command(azure_cli_command)
+        self.subproc.create_resource_group(resource_group, location)
 
     def get_deployment_output(self, deployment_name, output_name, resource_group):
-        azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
-        self.logger.debug(f"Getting Deployment Output: {deployment_name}:{output_name}")
-        self.logger.debug(f"Azure Command: {azure_cli_command}")
-        result = self.subproc.run_command(azure_cli_command)
-        result = json.loads(result)
+        result = json.loads(self.subproc.get_deployment_output(deployment_name, resource_group))
         if not result:
             self.logger.error(f"DEPLOYMENT NOT FOUND: {deployment_name}")
             exit()            
@@ -68,9 +62,7 @@ class Deployer():
         
         self.logger.debug(f"Deployment Name: {deployment_name}")
         parameters = self.build_param_string(params, subscription)
-        azure_cli_command = f"az deployment group create -f bicep/{bicep} -g {resource_group} --mode Incremental --name {deployment_name} --parameters {parameters} --output json"
-        self.logger.debug(f"command: {azure_cli_command}")
-        deploy_result = self.subproc.run_command(azure_cli_command)
+        deploy_result = self.subproc.deploy_group_create(bicep, resource_group, deployment_name, parameters)
         if "\"provisioningState\": \"Succeeded\"" in deploy_result:
             self.logger.debug("Deploy Complete\n")
             return
