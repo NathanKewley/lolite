@@ -26,8 +26,8 @@ lolite is an Azure Bicep orchestration tool. The main goal is to separate enviro
 ## Building From Source
 
 * Clone this repo
-* Build the project `python -m build`
-* Install `pip install dist/lolite-0.0.1-py3-none-any.whl`
+* Build the project `python3 -m build`
+* Install `pip3 install dist/lolite-0.0.1-py3-none-any.whl`
 
 ## Assumptions
 
