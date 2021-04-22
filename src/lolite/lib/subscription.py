@@ -12,19 +12,18 @@ class Subscription():
         self.subproc = Subproc()
 
     def check_if_current(self, subscription_name):
-        if subscription_name in self.subproc.run_command("az account show --output json"):
+        if subscription_name in self.subproc.get_current_subscription():
             return True
         return False
 
     def set_subscription(self, subscription_name):
         if not self.check_if_current(subscription_name):
             self.logger.debug(f"Setting Subscription: {subscription_name}")
-            subscriptions = json.loads(self.subproc.run_command("az account list --output json"))
+            subscriptions = json.loads(self.subproc.list_subscriptions())
             for subscription in subscriptions:
                 if subscription['name'] == subscription_name:
                     subscription_id = subscription['id']
-                    azure_cli_command = f"az account set --subscription {subscription_id} --output json"
-                    result = self.subproc.run_command(azure_cli_command)
+                    self.subproc.set_subscription(subscription_id)
                     return
             self.logger.error("SUBSCRIPTION NOT FOUND")
             exit()
