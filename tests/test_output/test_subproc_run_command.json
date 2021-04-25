@@ -1,0 +1,68 @@
+{
+    "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Resources/deployments/lolite-test.rg-lolite-test-01.lolite_automation_account",
+    "location": null,
+    "name": "lolite-test.rg-lolite-test-01.lolite_automation_account",
+    "properties": {
+      "correlationId": "8fe2fa86-0b9b-4c10-977b-612f4801c16e",
+      "debugSetting": null,
+      "dependencies": [],
+      "duration": "PT1.6839972S",
+      "error": null,
+      "mode": "Incremental",
+      "onErrorDeployment": null,
+      "outputResources": [
+        {
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Automation/automationAccounts/loliteAutomation",
+          "resourceGroup": "rg-lolite-test-01"
+        }
+      ],
+      "outputs": null,
+      "parameters": {
+        "appName": {
+          "type": "String",
+          "value": "loliteAutomation"
+        },
+        "location": {
+          "type": "String",
+          "value": "australiaeast"
+        },
+        "skuName": {
+          "type": "String",
+          "value": "Free"
+        }
+      },
+      "parametersLink": null,
+      "providers": [
+        {
+          "id": null,
+          "namespace": "Microsoft.Automation",
+          "registrationPolicy": null,
+          "registrationState": null,
+          "resourceTypes": [
+            {
+              "aliases": null,
+              "apiProfiles": null,
+              "apiVersions": null,
+              "capabilities": null,
+              "defaultApiVersion": null,
+              "locationMappings": null,
+              "locations": [
+                "australiaeast"
+              ],
+              "properties": null,
+              "resourceType": "automationAccounts"
+            }
+          ]
+        }
+      ],
+      "provisioningState": "Succeeded",
+      "templateHash": "14691466858861111339",
+      "templateLink": null,
+      "timestamp": "2021-04-25T06:35:24.501561+00:00",
+      "validatedResources": null
+    },
+    "resourceGroup": "rg-lolite-test-01",
+    "tags": null,
+    "type": "Microsoft.Resources/deployments"
+}
+  
