@@ -2,20 +2,19 @@ import yaml
 import json
 import os
 
-from lolite.lib.subproc import Subproc
 from lolite.lib.logger import Logger as logger
 from lolite.lib.subscription import Subscription
 
 class Deployer():
 
-    def __init__(self):
+    def __init__(self, subproc, subscription):
         self.logger = logger.get_logger()
         self.logger.propagate = False
-        self.subscription = Subscription()
-        self.subproc = Subproc()
+        self.subscription = subscription
+        self.subproc = subproc
 
     def resource_group_exists(self, resource_group):
-        groups = self.subproc.get_resource_groups(resource_group)
+        groups = self.subproc.get_resource_groups()
         if f"\"name\": \"{resource_group}\"" in groups:
             return True
         return False

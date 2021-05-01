@@ -19,7 +19,7 @@ class Subproc():
         else:
             return result.stderr
 
-    def get_resource_groups(self, resource_group):
+    def get_resource_groups(self):
         return self.run_command("az group list --output json")        
 
     def create_resource_group(self, resource_group, location):

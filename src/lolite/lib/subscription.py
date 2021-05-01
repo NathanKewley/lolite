@@ -1,15 +1,14 @@
 import json
 
-from lolite.lib.subproc import Subproc
 from lolite.lib.logger import Logger as logger
 
 
 class Subscription():
 
-    def __init__(self):
+    def __init__(self, subproc):
         self.logger = logger.get_logger()
         self.logger.propagate = False
-        self.subproc = Subproc()
+        self.subproc = subproc
 
     def check_if_current(self, subscription_name):
         if subscription_name in self.subproc.get_current_subscription():

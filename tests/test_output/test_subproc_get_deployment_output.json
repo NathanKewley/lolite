@@ -1,0 +1,117 @@
+{
+    "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Resources/deployments/lolite-test.rg-lolite-test-01.lolite_automation_storage",
+    "location": null,
+    "name": "lolite-test.rg-lolite-test-01.lolite_automation_storage",
+    "properties": {
+      "correlationId": "367fe038-eabd-4535-9be9-ba443032ecbf",
+      "debugSetting": null,
+      "dependencies": [
+        {
+          "dependsOn": [
+            {
+              "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Storage/storageAccounts/lolitestorekew",
+              "resourceGroup": "rg-lolite-test-01",
+              "resourceName": "lolitestorekew",
+              "resourceType": "Microsoft.Storage/storageAccounts"
+            }
+          ],
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Storage/storageAccounts/lolitestorekew/blobServices/default/containers/loliteautomation",
+          "resourceGroup": "rg-lolite-test-01",
+          "resourceName": "lolitestorekew/default/loliteautomation",
+          "resourceType": "Microsoft.Storage/storageAccounts/blobServices/containers"
+        }
+      ],
+      "duration": "PT25.002908S",
+      "error": null,
+      "mode": "Incremental",
+      "onErrorDeployment": null,
+      "outputResources": [
+        {
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Storage/storageAccounts/lolitestorekew",
+          "resourceGroup": "rg-lolite-test-01"
+        },
+        {
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-lolite-test-01/providers/Microsoft.Storage/storageAccounts/lolitestorekew/blobServices/default/containers/loliteautomation",
+          "resourceGroup": "rg-lolite-test-01"
+        }
+      ],
+      "outputs": {
+        "storageEndpoint": {
+          "type": "Object",
+          "value": {
+            "blob": "https://lolitestorekew.blob.core.windows.net/",
+            "file": "https://lolitestorekew.file.core.windows.net/",
+            "queue": "https://lolitestorekew.queue.core.windows.net/",
+            "table": "https://lolitestorekew.table.core.windows.net/"
+          }
+        },
+        "storageLocation": {
+          "type": "String",
+          "value": "australiaeast"
+        }
+      },
+      "parameters": {
+        "containerName": {
+          "type": "String",
+          "value": "loliteautomation"
+        },
+        "location": {
+          "type": "String",
+          "value": "australiaeast"
+        },
+        "skuName": {
+          "type": "String",
+          "value": "Standard_LRS"
+        },
+        "storageName": {
+          "type": "String",
+          "value": "lolitestorekew"
+        }
+      },
+      "parametersLink": null,
+      "providers": [
+        {
+          "id": null,
+          "namespace": "Microsoft.Storage",
+          "registrationPolicy": null,
+          "registrationState": null,
+          "resourceTypes": [
+            {
+              "aliases": null,
+              "apiProfiles": null,
+              "apiVersions": null,
+              "capabilities": null,
+              "defaultApiVersion": null,
+              "locationMappings": null,
+              "locations": [
+                "australiaeast"
+              ],
+              "properties": null,
+              "resourceType": "storageAccounts"
+            },
+            {
+              "aliases": null,
+              "apiProfiles": null,
+              "apiVersions": null,
+              "capabilities": null,
+              "defaultApiVersion": null,
+              "locationMappings": null,
+              "locations": [
+                null
+              ],
+              "properties": null,
+              "resourceType": "storageAccounts/blobServices/containers"
+            }
+          ]
+        }
+      ],
+      "provisioningState": "Succeeded",
+      "templateHash": "8076382038063338981",
+      "templateLink": null,
+      "timestamp": "2021-05-01T03:21:15.146105+00:00",
+      "validatedResources": null
+    },
+    "resourceGroup": "rg-lolite-test-01",
+    "tags": null,
+    "type": "Microsoft.Resources/deployments"
+}  

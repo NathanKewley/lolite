@@ -4,6 +4,8 @@ lolite is an Azure Bicep orchestration tool. The main goal is to separate enviro
 
 `NOTE: lolite is still very much a WIP`
 
+There is a getting started guide on my blog [here](https://nathan.kewley.me/2021-04-20-orchestrate-azure-bicep-deploys-with-lolite/). This is meant to be complementry to the info in this Readme.
+
 ## Goals
 
 * Separation of Bicep configuration and templates

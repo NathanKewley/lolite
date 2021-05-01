@@ -28,7 +28,6 @@ def test_get_child_items():
 def test_deploy():
     configuration = "lolite-test/rg-lolite-test-01/lolite_automation_account.yaml"
     result = orchestrator.deploy(configuration, dry_run=True)
-    print(result)
     assert len(result[0]) == 3
     assert result[0].items() == {('location', 'Ref:lolite-test.rg-lolite-test-01.lolite_automation_storage:storageLocation'), ('appName', 'loliteAutomation'), ('skuName', 'Free')}
     assert result[1] == "automation/automation_account.bicep"

@@ -12,9 +12,9 @@ class Orchestrator():
     def __init__(self):
         self.logger = logger.get_logger()
         self.logger.propagate = False
-        self.deployer = Deployer()
-        self.subscription = Subscription()
         self.subproc = Subproc()
+        self.subscription = Subscription(self.subproc)
+        self.deployer = Deployer(self.subproc, self.subscription)
         self.deploys = []
 
     def get_deployment_name(self, configuration):
