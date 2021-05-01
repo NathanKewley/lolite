@@ -2,7 +2,7 @@
 
 lolite is an Azure Bicep orchestration tool. The main goal is to separate environment configuration from templates. This is inspired by the AWS Sceptre tool.
 
-`NOTE: lolite is still very much a WIP`
+`NOTE: lolite is still very much a WIP.`
 
 There is a getting started guide on my blog [here](https://nathan.kewley.me/2021-04-20-orchestrate-azure-bicep-deploys-with-lolite/). This is meant to be complementry to the info in this Readme.
 
@@ -24,6 +24,8 @@ There is a getting started guide on my blog [here](https://nathan.kewley.me/2021
 * Python 3.8+
 * Azure CLI
 * Azure Bicep CLI
+
+Note: `tested on MacOS, Linux (Ubuntu) and WSL under Windows.`
 
 ## Installing
 
