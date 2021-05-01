@@ -25,6 +25,10 @@ There is a getting started guide on my blog [here](https://nathan.kewley.me/2021
 * Azure CLI
 * Azure Bicep CLI
 
+## Installing
+
+You can install lolite from pypi using: `pip install lolite==0.0.1`
+
 ## Building From Source
 
 * Clone this repo
