@@ -19,6 +19,10 @@ class Subproc():
         else:
             return result.stderr
 
+    def run_command_exit_code(self, command):
+        result = subprocess.run(command.split(' '), capture_output=True, check=False)
+        return result.returncode
+
     def get_resource_groups(self):
         return self.run_command("az group list --output json")        
 
