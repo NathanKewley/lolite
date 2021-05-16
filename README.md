@@ -17,7 +17,7 @@ There is a getting started guide on my blog [here](https://nathan.kewley.me/2021
 ## Not Goals
 
 * Support for anything other than Bicep on Azure
-* Support for multiple accounts
+* Support for multiple Azure tenancies
 
 ## Requirements
 
@@ -45,7 +45,6 @@ You can install lolite from pypi using: `pip install lolite==0.0.1`
 
 ## Possible Future Features
 
-* pre and post deploy hooks
 * Parallel deploys
 * configurable deploy mode
 
@@ -127,14 +126,23 @@ in this case `storage_account_and_container.yaml` might look like the following:
 ---
 bicep_path: storage_account.bicep
 
+pre_hooks:
+  PythonScript: scripts/test_python_hook.py
+
 params:
   storageName: storagetestlolit1
   containerName: blog
   skuName: Standard_LRS
   location: Ref:Subscription_1.Resource_Group_1.config2:storageLocation
+
+post_hooks:
+  BashScript: scripts/test_bash_hook.sh
+  
 ```
 
 The `bicep_path` here points to the template in the `bicep/` folder of the project. This bicep template is then deployed using the provided `params` block to the subscription and resource group determined by the configuration files path.
+
+`pre_hooks` and `post_hooks` allow you to specify external scripts that should be run before or after the bicep deplloyment respectivly. If A hook returns a non-success code deployment will be terminated. At current there is only support for `Python3` scripts and `Bash` scripts. `pre_commit` and `post_commit` Hooks are both optional optional.
 
 #### Referencing Other Deployment Outputs
 

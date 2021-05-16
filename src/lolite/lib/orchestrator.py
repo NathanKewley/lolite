@@ -83,13 +83,15 @@ class Orchestrator():
             self.logger.info(f"Deploying: {configuration} to {subscription}")
             if not dry_run:
                 # Run pre-delpoy hooks
-                self.hook_orchestrator.run_hooks(config['pre_hooks'])
+                if 'pre_hooks' in config.keys():
+                    self.hook_orchestrator.run_hooks(config['pre_hooks'])
 
                 # Run main deployment
                 self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
 
                 # Run pre-delpoy hooks
-                self.hook_orchestrator.run_hooks(config['post_hooks'])
+                if 'post_hooks' in config.keys():
+                    self.hook_orchestrator.run_hooks(config['post_hooks'])
             else:
                 return [config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription]
         else:
