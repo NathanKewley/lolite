@@ -6,6 +6,7 @@ from lolite.lib.subproc import Subproc
 from lolite.lib.logger import Logger as logger
 from lolite.lib.deployer import Deployer
 from lolite.lib.subscription import Subscription
+from lolite.lib.hook_orchestrator import HookOrchestrator
 
 class Orchestrator():
 
@@ -15,6 +16,7 @@ class Orchestrator():
         self.subproc = Subproc()
         self.subscription = Subscription(self.subproc)
         self.deployer = Deployer(self.subproc, self.subscription)
+        self.hook_orchestrator = HookOrchestrator()
         self.deploys = []
 
     def get_deployment_name(self, configuration):
@@ -80,7 +82,16 @@ class Orchestrator():
 
             self.logger.info(f"Deploying: {configuration} to {subscription}")
             if not dry_run:
+                # Run pre-delpoy hooks
+                if 'pre_hooks' in config.keys():
+                    self.hook_orchestrator.run_hooks(config['pre_hooks'])
+
+                # Run main deployment
                 self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
+
+                # Run pre-delpoy hooks
+                if 'post_hooks' in config.keys():
+                    self.hook_orchestrator.run_hooks(config['post_hooks'])
             else:
                 return [config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription]
         else:

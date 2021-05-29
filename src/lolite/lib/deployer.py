@@ -1,6 +1,4 @@
-import yaml
 import json
-import os
 
 from lolite.lib.logger import Logger as logger
 from lolite.lib.subscription import Subscription

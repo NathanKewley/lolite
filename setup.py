@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="lolite",
-    version="0.0.1",
+    version="0.0.2",
     author="Nathan Kewley",
     author_email="nathan.kewley@gmail.com",
     description="Azure Bicep Deployment Orchestration",
