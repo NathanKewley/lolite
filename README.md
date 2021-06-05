@@ -131,6 +131,7 @@ in this case `storage_account_and_container.yaml` might look like the following:
 ```
 ---
 bicep_path: storage_account.bicep
+scope: resource_group
 
 pre_hooks:
   PythonScript: scripts/test_python_hook.py
@@ -147,6 +148,8 @@ post_hooks:
 ```
 
 The `bicep_path` here points to the template in the `bicep/` folder of the project. This bicep template is then deployed using the provided `params` block to the subscription and resource group determined by the configuration files path.
+
+`scope` is an optional parameter, where the default value is not specified is `resource_group`. The other valid value is `subscription`. This sets the deployment at a subscription scope rather than a resource group scope. This is particularly useful for setting up `Azure Policy`.
 
 `pre_hooks` and `post_hooks` allow you to specify external scripts that should be run before or after the bicep deplloyment respectivly. If A hook returns a non-success code deployment will be terminated. At current there is only support for `Python3` scripts and `Bash` scripts. `pre_commit` and `post_commit` Hooks are both optional optional.
 

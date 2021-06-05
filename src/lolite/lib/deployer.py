@@ -65,3 +65,14 @@ class Deployer():
             return
         self.logger.error(f"DEPLOYMENT FAILED: {deploy_result}")
         exit()
+
+    def deploy_bicep_subscription(self, params, bicep, location, deployment_name, subscription):
+        self.subscription.set_subscription(subscription)       
+        self.logger.debug(f"Deployment Name: {deployment_name}")
+        parameters = self.build_param_string(params, subscription)
+        deploy_result = self.subproc.deploy_subscription_create(bicep, deployment_name, parameters, location)
+        if "\"provisioningState\": \"Succeeded\"" in deploy_result:
+            self.logger.debug("Deploy Complete\n")
+            return
+        self.logger.error(f"DEPLOYMENT FAILED: {deploy_result}")
+        exit()

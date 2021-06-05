@@ -87,7 +87,13 @@ class Orchestrator():
                     self.hook_orchestrator.run_hooks(config['pre_hooks'])
 
                 # Run main deployment
-                self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
+                if 'scope' in config:
+                    if config['scope'] == 'subscription':
+                        self.deployer.deploy_bicep_subscription(config['params'], config['bicep_path'], location, deployment_name, subscription)   
+                    if config['scope'] == 'resource_group':     
+                        self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
+                else:
+                    self.deployer.deploy_bicep(config['params'], config['bicep_path'], resource_group, location, deployment_name, subscription)
 
                 # Run pre-delpoy hooks
                 if 'post_hooks' in config.keys():
@@ -114,7 +120,6 @@ class Orchestrator():
 
     def deploy_subscription(self, configuration, dry_run=False):
         test_results = []
-        subscription = self.get_subscription(configuration)
         resource_groups = self.get_child_items(f"configuration/{configuration}/")
         for resource_group in resource_groups:
             if not dry_run:
