@@ -37,6 +37,11 @@ class Subproc():
         self.logger.debug(f"command: {azure_cli_command}")
         return self.run_command(azure_cli_command)    
 
+    def deploy_subscription_create(self, bicep, deployment_name, parameters, location):
+        azure_cli_command = f"az deployment sub create -f bicep/{bicep} --name {deployment_name} --parameters {parameters} --location {location} --output json"
+        self.logger.debug(f"command: {azure_cli_command}")
+        return self.run_command(azure_cli_command)    
+
     def get_deployment_output(self, deployment_name, resource_group, output_name):
         azure_cli_command = f"az deployment group show --name {deployment_name} --resource-group {resource_group} --output json"
         self.logger.debug(f"Getting Deployment Output: {deployment_name}:{output_name}")

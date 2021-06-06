@@ -25,7 +25,7 @@ jobs:
     - name: Build and install lolite
       run: |
         python -m build
-        pip install dist/lolite-0.0.2-py3-none-any.whl
+        pip install dist/lolite-0.0.3-py3-none-any.whl
     - name: Test with pytest
       run: |
         pytest
