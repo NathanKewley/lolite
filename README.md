@@ -10,8 +10,6 @@ There is a getting started guide on my blog [here](https://nathan.kewley.me/2021
 
 [lolite sample project](https://github.com/NathanKewley/lolite-sample-project)
 
-[lolite Slack](https://join.slack.com/t/lolite/shared_invite/zt-r0lgmogy-ENKwggfvR6Tt3RRK709ZHg), ask questions and get help here.
-
 ## Goals
 
 * Separation of Bicep configuration and templates
